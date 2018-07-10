@@ -8,6 +8,10 @@ class Actors {
   render() {
     ctx.drawImage(Resources.get(this.sprite), this.x * 101, this.y * 83);
   }
+  update(dt) {
+    this.isOutOfBoundsX = this.x > 5;
+    this.isOutOfBoundsY = this.y < 1;
+  }
 }
 
 // Enemies our player must avoid
@@ -17,6 +21,15 @@ class Enemy extends Actors {
     this.sprite += 'enemy-bug.png';
     this.x = x;
     this.y = y;
+  }
+  update(dt) {
+    super.update();
+    if(this.isOutOfBoundsX) {
+      this.x = -1;
+    }
+    else {
+      this.x += dt;
+    }
   }
 }
 
