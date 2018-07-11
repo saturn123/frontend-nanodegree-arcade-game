@@ -5,12 +5,25 @@ class Actors {
     this.x = 2;
     this.y = 5;
   }
+  // Draw the enemy or player on the screen, required method for game
   render() {
     ctx.drawImage(Resources.get(this.sprite), this.x * 101, this.y * 83);
   }
+  //Update method to check if x and y position out of bound
   update(dt) {
     this.isOutOfBoundsX = this.x > 5;
     this.isOutOfBoundsY = this.y < 1;
+  }
+  //Method for collision detection for player and/or Enemy
+  checkCollisions(playerOrEnemy) {
+    if(this.y === playerOrEnemy.y) {
+      if(this.x >= playerOrEnemy.x - 0.5 && this.x <= playerOrEnemy.x + 0.5) {
+        return true;
+      }
+    }
+    else {
+      return false;
+    }
   }
 }
 
@@ -18,10 +31,13 @@ class Actors {
 class Enemy extends Actors {
   constructor(x, y) {
     super();
+    // The image/sprite for our enemies
     this.sprite += 'enemy-bug.png';
     this.x = x;
     this.y = y;
   }
+  // Update the enemy's position, required method for game
+  // Parameter: dt, a time delta between ticks
   update(dt) {
     super.update();
     if(this.isOutOfBoundsX) {
@@ -33,30 +49,7 @@ class Enemy extends Actors {
   }
 }
 
-
-// var Enemy = function() {
-//     // Variables applied to each of our instances go here,
-//     // we've provided one for you to get started
-//
-//     // The image/sprite for our enemies, this uses
-//     // a helper we've provided to easily load images
-//     this.sprite = 'images/enemy-bug.png';
-// };
-//
-// // Update the enemy's position, required method for game
-// // Parameter: dt, a time delta between ticks
-// Enemy.prototype.update = function(dt) {
-//     // You should multiply any movement by the dt parameter
-//     // which will ensure the game runs at the same speed for
-//     // all computers.
-// };
-//
-// // Draw the enemy on the screen, required method for game
-// Enemy.prototype.render = function() {
-//     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-// };
-
-// Now write your own player class
+// Player class
 // This class requires an update(), render() and
 // a handleInput() method.
 class Player extends Actors {
@@ -84,8 +77,6 @@ class Player extends Actors {
 
   }
 }
-
-
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
