@@ -56,7 +56,25 @@ class Player extends Actors {
   constructor() {
     super();
     this.sprite += 'char-boy.png';
+    this.moving = false;
+    this.win = false;
   }
+  //Update method to check if the Player win the game
+  update(dt) {
+    super.update();
+      if(this.isOutOfBoundsY && !this.moving && !this.win) {
+        alert('win');
+        this.win = true;
+        player.x = 2;
+        player.y = 5;
+      }
+  }
+
+  render() {
+    super.render();
+    this.moving = false;
+  }
+
   handleInput(input) {
     switch (input) {
       case 'left':
@@ -74,7 +92,7 @@ class Player extends Actors {
       default:
         break;
     }
-
+    this.moving = true;
   }
 }
 
