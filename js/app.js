@@ -35,17 +35,28 @@ class Enemy extends Actors {
     this.sprite += 'enemy-bug.png';
     this.x = x;
     this.y = y;
+    this.level = 1;
+    this.speed = Math.floor(this.level + Math.random() * this.level);
   }
   // Update the enemy's position, required method for game
   // Parameter: dt, a time delta between ticks
   update(dt) {
     super.update();
     if(this.isOutOfBoundsX) {
-      this.x = -1;
+      this.reset();
     }
     else {
-      this.x += dt;
+      this.x += this.speed * dt;
     }
+  }
+
+  changeSpeed(num) {
+    this.speed = 0.5 + Math.random() * num;
+  }
+
+  reset() {
+    this.changeSpeed(3.0);
+    this.x = -(Math.floor(1 + Math.random() * 5));
   }
 }
 
@@ -58,6 +69,8 @@ class Player extends Actors {
     this.sprite += 'char-boy.png';
     this.moving = false;
     this.win = false;
+    this.score = 0;
+    this.lives = 0
   }
   //Update method to check if the Player win the game
   update(dt) {
@@ -65,8 +78,6 @@ class Player extends Actors {
       if(this.isOutOfBoundsY && !this.moving && !this.win) {
         alert('win');
         this.win = true;
-        player.x = 2;
-        player.y = 5;
       }
   }
 
@@ -100,7 +111,7 @@ class Player extends Actors {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 const player = new Player();
-const allEnemies = [...Array(3)].map((element, i) => new Enemy(0, i+1));
+const allEnemies = [...Array(3)].map((element, i) => new Enemy(-(Math.floor(1 + Math.random() * 5)), i+1));
 
 
 // This listens for key presses and sends the keys to your
