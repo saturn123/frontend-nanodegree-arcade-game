@@ -1,3 +1,13 @@
 body {
     text-align: center;
 }
+
+.score-panel {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+	margin: 3rem auto 0 auto;
+	width: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}

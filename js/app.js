@@ -1,3 +1,8 @@
+let gameScore = 0,
+    lives = 3,
+    livesRemaining = document.querySelector(".lives > span"),
+    score = document.querySelector('.score > span');
+
 //General class to create characters in the game
 class Actors {
   constructor() {
@@ -7,12 +12,12 @@ class Actors {
   }
   // Draw the enemy or player on the screen, required method for game
   render() {
-    ctx.drawImage(Resources.get(this.sprite), this.x * 101, this.y * 83);
+    ctx.drawImage(Resources.get(this.sprite), this.x * 101, (this.y * 83)-20);
   }
   //Update method to check if x and y position out of bound
   update(dt) {
     this.isOutOfBoundsX = this.x > 5;
-    this.isOutOfBoundsY = this.y < 1;
+    this.isOutOfBoundsY = this.y === 0;
   }
   //Method for collision detection for player and/or Enemy
   checkCollisions(playerOrEnemy) {
@@ -35,8 +40,8 @@ class Enemy extends Actors {
     this.sprite += 'enemy-bug.png';
     this.x = x;
     this.y = y;
-    this.level = 1;
-    this.speed = Math.floor(this.level + Math.random() * this.level);
+    this.level = 3;
+    this.speed = Math.floor(200 * this.level + Math.random() * this.level);
   }
   // Update the enemy's position, required method for game
   // Parameter: dt, a time delta between ticks
@@ -47,15 +52,16 @@ class Enemy extends Actors {
     }
     else {
       this.x += this.speed * dt;
+      livesRemaining.innerText = lives;
     }
   }
 
   changeSpeed(num) {
-    this.speed = 0.5 + Math.random() * num;
+    this.speed = 1 + Math.random() * num;
   }
 
   reset() {
-    this.changeSpeed(3.0);
+    this.changeSpeed(this.level);
     this.x = -(Math.floor(1 + Math.random() * 5));
   }
 }
@@ -70,17 +76,17 @@ class Player extends Actors {
     this.moving = false;
     this.win = false;
     this.score = 0;
-    this.lives = 0
   }
   //Update method to check if the Player win the game
   update(dt) {
     super.update();
-      if(this.isOutOfBoundsY && !this.moving && !this.win) {
-        alert('win');
-        this.win = true;
+      if(this.isOutOfBoundsY) {
+        player.x = 2;
+        player.y = 5;
+
       }
   }
-
+  // Draw the enemy or player on the screen, required method for game
   render() {
     super.render();
     this.moving = false;
@@ -105,13 +111,16 @@ class Player extends Actors {
     }
     this.moving = true;
   }
+
 }
+
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 const player = new Player();
 const allEnemies = [...Array(3)].map((element, i) => new Enemy(-(Math.floor(1 + Math.random() * 5)), i+1));
+
 
 
 // This listens for key presses and sends the keys to your

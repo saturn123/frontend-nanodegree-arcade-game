@@ -87,6 +87,16 @@ var Engine = (function(global) {
           if(player.checkCollisions(enemy) || enemy.checkCollisions(player)) {
             player.x = 2;
             player.y = 5;
+            lives--;
+            livesRemaining.innerText = lives;
+            if (lives === 0) {
+      				//Will replace with modal
+      				confirm(`Game Over! Do you want to play again?`);
+      				lives = 3;
+      				gameScore = 0;
+      				livesLeft.innerText = lives;
+      				score.innerText = '';
+      			}
           }
         });
     }
@@ -161,7 +171,6 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
-
         player.render();
     }
 
