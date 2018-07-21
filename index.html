@@ -7,16 +7,25 @@
 </head>
 <body>
   <div class = "container">
-    <header>
-      <h1>Arcade Game</h1>
-    </header>
     <section class="score-panel">
-      <div class="score">Score: <span>0 </span>points</div>
-      <div class="lives">Remaining lives: <span></span></div>
-
+      <div class="score">Score: <span> 0</span></div>
+      <div class="lives">Remaining lives: <span> 3</span></div>
     </section>
-
   </div>
+  <!-- Modal -->
+   <div class="modal out">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h2 class="modal-title">Title</h2>
+               <div class="modal-btn-close fa fa-times"></div>
+           </div>
+           <div class="modal-body">
+               <p class="modal-message"><span class="modal-level"></span></p>
+               <button class="modal-btn-cont"></button>
+           </div>
+       </div>
+   </div>
+
     <script src="js/resources.js"></script>
     <script src="js/app.js"></script>
     <script src="js/engine.js"></script>

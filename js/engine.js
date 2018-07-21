@@ -80,25 +80,9 @@ var Engine = (function(global) {
     function update(dt) {
         updateEntities(dt);
         checkCollisions();
-    }
+        checkGameWon();
+        checkEndGame();
 
-    function checkCollisions() {
-        allEnemies.forEach(enemy => {
-          if(player.checkCollisions(enemy) || enemy.checkCollisions(player)) {
-            player.x = 2;
-            player.y = 5;
-            lives--;
-            livesRemaining.innerText = lives;
-            if (lives === 0) {
-      				//Will replace with modal
-      				confirm(`Game Over! Do you want to play again?`);
-      				lives = 3;
-      				gameScore = 0;
-      				livesLeft.innerText = lives;
-      				score.innerText = '';
-      			}
-          }
-        });
     }
 
     /* This is called by the update function and loops through all of the
@@ -174,12 +158,47 @@ var Engine = (function(global) {
         player.render();
     }
 
+    function checkCollisions() {
+        allEnemies.forEach(enemy => {
+          if(player.checkCollisions(enemy) || enemy.checkCollisions(player)) {
+            reset();
+            player.loseLife();
+
+          }
+        });
+    }
+
     /* This function does nothing but it could have been a good place to
      * handle game reset states - maybe a new game menu or a game over screen
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
         // noop
+        // lives = 3;
+        // gameScore = 0;
+        // livesRemaining.innerText = lives;
+        // score.innerText = '0';
+        // pace = 2;
+        allEnemies.forEach((enemy) => {
+          enemy.reset();
+        });
+        player.reset();
+    }
+
+    function checkGameWon() {
+      if (player.win) {
+            showModal();    // Show the victory modal
+            reset();        // Reset all
+        } else {
+          player.levelUp();
+        }
+    }
+
+    function checkEndGame() {
+      if (player.allLivesUsed()) {
+            showModal();                            // Show the gameOver modal
+                                 // Game Over for the playe                              // Reset all entities
+          }
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -194,6 +213,61 @@ var Engine = (function(global) {
         'images/char-boy.png'
     ]);
     Resources.onReady(init);
+
+    /*=============================================
+    =                 Modal controls              =
+    =============================================*/
+
+    const modal = document.querySelector('.modal');                     // DOM: Modal
+    const modalCloseBtn = document.querySelector('.modal-btn-close');   // DOM: Close button in modal
+    const modalContBtn = document.querySelector('.modal-btn-cont');     // DOM: Button in modal for either next or again
+
+    /**
+     * Moves the modal out of view
+     */
+    const hideModal = () => {
+        modal.classList.add('out');
+    };
+
+    /**
+     * Dynamically updates the modal and brings it into view
+     */
+    const showModal = () => {
+        const modalTitle = document.querySelector('.modal-title');
+        const modalMessage = document.querySelector('.modal-message')
+             // DOM: Modal title
+
+        // Not a GameOver
+        if (!player.allLivesUsed()) {
+            modalTitle.innerHTML = ' You Win!!! ';
+            modalMessage.innerHTML = `You scored ${score.outerHTML}.`;
+
+                                        // Change title
+                 // Change button
+        }
+        // Gameover
+        else {
+            modalTitle.innerHTML = ' Game Over ';
+            modalMessage.innerHTML = `You scored ${score.outerHTML}.`;                                     // Change title
+           // Change message with level element
+            modalContBtn.innerHTML = 'Play agian?';
+                                                  // Change button
+        }
+        modal.classList.remove('out');
+        // Put modal into view
+    };
+
+    modalCloseBtn.addEventListener('click', function() {
+      hideModal();
+      player.endGame();
+    }); // Hide modal on close button click
+    modalContBtn.addEventListener('click', function() {
+      hideModal();
+      player.endGame();
+    });  // Hide modal on continue button click
+
+    /*========  End of Modal controls  =========*/
+
 
     /* Assign the canvas' context object to the global variable (the window
      * object when run in a browser) so that developers can use it more easily

@@ -6,8 +6,73 @@ body {
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
 	margin: 3rem auto 0 auto;
-	width: 50%;
+	width: 30%;
 	display: flex;
 	align-items: center;
 	justify-content: space-around;
 }
+
+/*=============================================
+=                   Modal                     =
+=============================================*/
+
+.modal {
+    position: fixed;
+    z-index: 99;
+    width: 300px;
+    height: 150px;
+    top: 250px;
+    -webkit-transition: top 500ms;
+    -o-transition: top 500ms;
+    -moz-transition: top 500ms;
+    transition: top 500ms;
+}
+
+.out {
+    top: -220px;
+    -webkit-transition: top 500ms;
+    -o-transition: top 500ms;
+    -moz-transition: top 500ms;
+    transition: top 500ms;
+}
+
+.modal-content {
+    background-color: rgba(255, 255, 255, 0.667);
+    height: 100%;
+    text-align: center;
+}
+
+.modal-header {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+       -moz-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+       -moz-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    width: 100%;
+    height: 50px;
+    background-color: rgba(34, 102, 170, 0.8);
+}
+
+.modal-btn-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 1.5em;
+}
+
+.modal-body {
+    color: black;
+    padding-top: 20px;
+}
+
+/*=====  End of Modal  ======*/
