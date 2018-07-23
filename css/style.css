@@ -1,26 +1,45 @@
-body {
+/* body {
     text-align: center;
+} */
+
+body {
+    height: 100vh;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    background: no-repeat center/100% -moz-linear-gradient(290deg, #26a 40%, skyblue 100%);
+    background: no-repeat center/100% -o-linear-gradient(290deg, #26a 40%, skyblue 100%);
+    background: no-repeat center/100% linear-gradient(160deg, #26a 40%, skyblue 100%);
+    color: whitesmoke;
+    font-family: 'Open Sans', sans-serif;
 }
+
 
 .score-panel {
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 300;
-	margin: 3rem auto 0 auto;
-	width: 30%;
-	display: flex;
-	align-items: center;
-	justify-content: space-around;
+  width: 500px;
+  margin: 20px 0 0 0;
 }
 
-/*=============================================
-=                   Modal                     =
-=============================================*/
+.score-panel .score {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  margin: 0 5px 0 0;
+}
+
+.score-panel .lives {
+  display: inline-block;
+  margin:  0 50px;
+  float: right;
+}
+
+/* Modal */
 
 .modal {
-    position: fixed;
+    position: absolute;
     z-index: 99;
-    width: 300px;
-    height: 150px;
+    width: 360px;
+    height: 200px;
     top: 250px;
     -webkit-transition: top 500ms;
     -o-transition: top 500ms;
@@ -71,7 +90,7 @@ body {
 }
 
 .modal-body {
-    color: black;
+    color: #d41a1a;
     padding-top: 20px;
 }
 

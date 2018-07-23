@@ -1,5 +1,5 @@
 let gameScore = 0,
-
+    level = 3,
     livesRemaining = document.querySelector(".lives > span"),
     score = document.querySelector('.score > span');
 
@@ -26,13 +26,16 @@ class Actors {
   }
   //Method for collision detection for player and/or Enemy
   checkCollisions(playerOrEnemy) {
+    //Check if enemy and player are on the same y-axis position
     if(this.y === playerOrEnemy.y) {
+      //Check for x-axis position and set conditions for collision
       if(this.x >= playerOrEnemy.x - 0.5 && this.x <= playerOrEnemy.x + 0.5) {
-        return true;
+        return true;  //collision
       }
     }
+    // Not on same y-axis position.
     else {
-      return false;
+      return false; //No collision
     }
   }
 }
@@ -45,14 +48,13 @@ class Enemy extends Actors {
     this.sprite += 'enemy-bug.png';
     this.x = x;
     this.y = y;
-    this.rate = 5;
-    this.speed = Math.floor(200 * this.rate + Math.random() * this.rate);
+    this.speed = Math.floor(400 * level + Math.random() * level);
   }
   // Update the enemy's position, required method for game
   // Parameter: dt, a time delta between ticks
   update(dt) {
     super.update();
-    if(this.isOutOfBoundsX) {
+    if(this.isOutOfBoundsX) {  //Check if enemey out of bound
       this.reset();
     }
     else {
@@ -60,12 +62,14 @@ class Enemy extends Actors {
     }
   }
 
+  //Change the speed of enemy travel
   changeSpeed(rate) {
     this.speed = 2 + Math.random() * rate;
   }
 
+  //Reset enemy and move with a different speed.
   reset() {
-    this.changeSpeed(randomIntFromInterval(1,this.rate));
+    this.changeSpeed(randomIntFromInterval(1,level));
     this.x = -(Math.floor(1 + Math.random() * 5));
   }
 }
@@ -85,7 +89,6 @@ class Player extends Actors {
   update(dt) {
     super.update();
     if(!this.moving && !this.win ) {
-
       this.checkIfWin();
       }
 
@@ -96,6 +99,7 @@ class Player extends Actors {
     this.moving = false;
   }
 
+  //Handle different direction movement.
   handleInput(input) {
     switch (input) {
       case 'left':
@@ -116,34 +120,42 @@ class Player extends Actors {
     this.moving = true;
   }
 
+  //Reset the player to start position
   reset() {
     this.x = 2;
     this.y = 5;
     this.win = false;
   }
 
+  //Increase level, increasing the speed of enemy movement
   levelUp () {
     if(gameScore >= 5 && this.lives > 0) {
-      this.rate += 3;
+      level = 6;
+    } else if (gameScore >= 10 && this.lives > 0) {
+      level = 8;
     }
   }
 
+  //Checks the players position to see if they win
   checkIfWin() {
     if (this.isOutOfBoundsY) {
-      if(gameScore === 10 && this.lives > 0){
-        this.success();
-      } else {
+      //if not win increase the game score
         gameScore++;
         score.innerText = gameScore * 100;
         this.reset();
+      } else {
+        if(gameScore === 20 && this.lives > 0){
+          this.success();
       }
     }
   }
 
+  //Event when the player gets the max score
   success() {
     this.win = true;
   }
 
+  //Removes players life if greater than zero
   loseLife() {
     if (this.lives > 0) {
       this.lives--;
@@ -151,11 +163,14 @@ class Player extends Actors {
     }
   }
 
+  //Checks if no more lives left
   allLivesUsed() {
     return this.lives === 0 ? true : false;
   }
 
+  //Handles score and lives reset
   endGame() {
+    level = 2;
     this.lives = 3;
     livesRemaining.innerText = this.lives;
     gameScore = 0;
@@ -163,7 +178,6 @@ class Player extends Actors {
   }
 
 }
-
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies

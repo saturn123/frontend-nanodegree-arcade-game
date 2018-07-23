@@ -78,10 +78,11 @@ var Engine = (function(global) {
      * on the entities themselves within your app.js file).
      */
     function update(dt) {
-        updateEntities(dt);
-        checkCollisions();
         checkGameWon();
         checkEndGame();
+        updateEntities(dt);
+        checkCollisions();
+
 
     }
 
@@ -173,31 +174,29 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
-        // lives = 3;
-        // gameScore = 0;
-        // livesRemaining.innerText = lives;
-        // score.innerText = '0';
-        // pace = 2;
         allEnemies.forEach((enemy) => {
-          enemy.reset();
+        enemy.reset();
         });
         player.reset();
     }
 
+    //Check for game won
     function checkGameWon() {
       if (player.win) {
             showModal();    // Show the victory modal
-            reset();        // Reset all
+            player.endGame();
+            reset();       // Reset all
         } else {
           player.levelUp();
         }
     }
 
+    //Checks if the game is over and resets everything when no more lives left
     function checkEndGame() {
       if (player.allLivesUsed()) {
-            showModal();                            // Show the gameOver modal
-                                 // Game Over for the playe                              // Reset all entities
+            showModal();
+            player.endGame();
+            reset();
           }
     }
 
@@ -214,60 +213,50 @@ var Engine = (function(global) {
     ]);
     Resources.onReady(init);
 
-    /*=============================================
-    =                 Modal controls              =
-    =============================================*/
+    /*
+    * Modal controls              =
+   */
 
-    const modal = document.querySelector('.modal');                     // DOM: Modal
-    const modalCloseBtn = document.querySelector('.modal-btn-close');   // DOM: Close button in modal
-    const modalContBtn = document.querySelector('.modal-btn-cont');     // DOM: Button in modal for either next or again
+    const modal = document.querySelector('.modal');
+    const modalCloseBtn = document.querySelector('.modal-btn-close');
+    const modalContBtn = document.querySelector('.modal-btn-cont');
 
-    /**
+    /*
      * Moves the modal out of view
      */
     const hideModal = () => {
         modal.classList.add('out');
     };
 
-    /**
+    /*
      * Dynamically updates the modal and brings it into view
      */
     const showModal = () => {
         const modalTitle = document.querySelector('.modal-title');
         const modalMessage = document.querySelector('.modal-message')
-             // DOM: Modal title
 
-        // Not a GameOver
+        // Game Not Over yet
         if (!player.allLivesUsed()) {
             modalTitle.innerHTML = ' You Win!!! ';
             modalMessage.innerHTML = `You scored ${score.outerHTML}.`;
-
-                                        // Change title
-                 // Change button
+            modalContBtn.innerHTML = 'Reset';
         }
+
         // Gameover
         else {
             modalTitle.innerHTML = ' Game Over ';
-            modalMessage.innerHTML = `You scored ${score.outerHTML}.`;                                     // Change title
-           // Change message with level element
+            modalMessage.innerHTML = `You scored ${score.outerHTML}.`;
             modalContBtn.innerHTML = 'Play agian?';
-                                                  // Change button
         }
-        modal.classList.remove('out');
         // Put modal into view
+        modal.classList.remove('out');
+
     };
 
-    modalCloseBtn.addEventListener('click', function() {
-      hideModal();
-      player.endGame();
-    }); // Hide modal on close button click
-    modalContBtn.addEventListener('click', function() {
-      hideModal();
-      player.endGame();
-    });  // Hide modal on continue button click
-
-    /*========  End of Modal controls  =========*/
-
+    // Hide modal on close button click
+    modalCloseBtn.addEventListener('click', hideModal);
+    // Hide modal on continue button click
+    modalContBtn.addEventListener('click', hideModal);
 
     /* Assign the canvas' context object to the global variable (the window
      * object when run in a browser) so that developers can use it more easily
