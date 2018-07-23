@@ -1,5 +1,8 @@
 # Frontend-Nanodegree-Arcade-Game
 ===============================
+You can also follow this [link](https://saturn123.github.io/frontend-nanodegree-arcade-game/) to play it.
+
+
 ## Instructions
 
 1) Open the index.html file in your browser
